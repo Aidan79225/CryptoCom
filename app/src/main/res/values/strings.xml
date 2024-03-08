@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">CryptoCom</string>
+    <string name="clear_data">Clear Data</string>
+    <string name="load_data">Load Data</string>
+    <string name="use_all">All</string>
+    <string name="use_crypto">Crypto</string>
+    <string name="use_fiat">Fiat</string>
+    <string name="search_hint_text">Search currency</string>
+
+    <string name="load_data_succeed_msg">Successfully loaded data from assets</string>
+    <string name="clear_data_succeed_msg">Successfully cleared data</string>
+
+    <string name="load_crypto_data_succeed_msg">Successfully loaded crypto data</string>
+    <string name="load_fiat_data_succeed_msg">Successfully loaded fiat data</string>
+    <string name="load_all_data_succeed_msg">Successfully loaded all data</string>
+    <string name="no_results">No Results</string>
+</resources>
