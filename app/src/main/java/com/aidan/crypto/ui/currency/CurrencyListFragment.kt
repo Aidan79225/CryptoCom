@@ -31,6 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -110,6 +112,8 @@ fun SearchCurrencyBar(
             .padding(20.dp)
             .fillMaxWidth()
     ) {
+        val keyboardController = LocalSoftwareKeyboardController.current
+        val focusManager = LocalFocusManager.current
         BasicTextField(
             value = viewState.searchKey,
             onValueChange = { vm.updateSearchKey(it) },
@@ -133,6 +137,8 @@ fun SearchCurrencyBar(
         } else {
             Icon(Icons.Default.Clear, contentDescription = "", modifier = Modifier.clickable {
                 vm.updateSearchKey("")
+                keyboardController?.hide()
+                focusManager.clearFocus()
             })
         }
     }

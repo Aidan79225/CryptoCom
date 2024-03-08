@@ -7,13 +7,14 @@ class SearchCurrencyInfoUseCase {
         val formalKey = key.lowercase()
         return totalCurrencyInfoList.filter {
             it.name.lowercase().startsWith(formalKey) ||
-                    it.symbol.startsWith(key) ||
-                    containsPartial(key, it)
+                    it.symbol.lowercase().startsWith(formalKey) ||
+                    containsPartial(formalKey, it)
         }
     }
 
     private fun containsPartial(key: String, currencyInfo: CurrencyInfo): Boolean {
         return currencyInfo.name
+            .lowercase()
             .split(" ")
             .firstOrNull { it.startsWith(key) } != null
     }
