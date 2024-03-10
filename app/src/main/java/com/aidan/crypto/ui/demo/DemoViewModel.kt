@@ -1,5 +1,6 @@
 package com.aidan.crypto.ui.demo
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aidan.crypto.R
@@ -34,9 +35,9 @@ class DemoViewModel(
         }
     }
 
-    fun loadDataFromAssets() {
+    fun loadDataFromAssets(context: Context) {
         viewModelScope.launch {
-            val data = loadDataFromAssetUseCase.execute()
+            val data = loadDataFromAssetUseCase.execute(context.assets.open("data.json"))
             currencyInfoDao.insertAll(data)
             _viewEvent.emit(ViewEvent.ShowToast(R.string.load_data_succeed_msg))
         }

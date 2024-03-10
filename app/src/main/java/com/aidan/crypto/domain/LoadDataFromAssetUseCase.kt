@@ -8,13 +8,12 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
+import java.io.InputStream
 import java.io.InputStreamReader
 
-class LoadDataFromAssetUseCase(
-    private val context: Context
-) {
-    suspend fun execute(): List<CurrencyInfo> = withContext(Dispatchers.Default) {
-        val bufferReader = BufferedReader(InputStreamReader(context.assets.open("data.json")))
+class LoadDataFromAssetUseCase() {
+    suspend fun execute(dataInputStream: InputStream): List<CurrencyInfo> = withContext(Dispatchers.Default) {
+        val bufferReader = BufferedReader(InputStreamReader(dataInputStream))
         val jsonString = buildString {
             bufferReader.lines().forEach {
                 append(it)

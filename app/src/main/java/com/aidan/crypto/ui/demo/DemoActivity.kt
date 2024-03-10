@@ -47,7 +47,7 @@ class DemoActivity: AppCompatActivity() {
                 vm.deleteAll()
             }
             R.id.load_data -> {
-                vm.loadDataFromAssets()
+                vm.loadDataFromAssets(this)
             }
             R.id.use_crypto -> {
                 vm.loadCryptoCurrency()
