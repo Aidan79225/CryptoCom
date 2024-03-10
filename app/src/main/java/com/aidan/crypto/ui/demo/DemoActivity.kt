@@ -26,6 +26,7 @@ class DemoActivity: AppCompatActivity() {
                 vb.fragmentContainer.id,
                 CurrencyListFragment.newInstance(it.currencyInfoList.toTypedArray())
             ).commit()
+            setTitle(it.titleResId)
         }
 
         subscribe(vm.viewEvent) {

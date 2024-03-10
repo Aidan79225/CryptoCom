@@ -35,13 +35,16 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.aidan.crypto.R
 import com.aidan.crypto.entity.CurrencyInfo
+import kotlinx.coroutines.selects.select
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CurrencyListFragment : Fragment() {
@@ -115,8 +118,8 @@ fun SearchCurrencyBar(
         val keyboardController = LocalSoftwareKeyboardController.current
         val focusManager = LocalFocusManager.current
         BasicTextField(
-            value = viewState.searchKey,
-            onValueChange = { vm.updateSearchKey(it) },
+            value = TextFieldValue(text = viewState.searchKey, selection = TextRange(viewState.searchKey.length)),
+            onValueChange = { vm.updateSearchKey(it.text) },
             textStyle = TextStyle(
                 fontSize = 20.sp,
                 color = Color.DarkGray

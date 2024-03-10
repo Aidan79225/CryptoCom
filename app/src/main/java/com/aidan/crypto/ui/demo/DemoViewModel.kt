@@ -1,6 +1,7 @@
 package com.aidan.crypto.ui.demo
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aidan.crypto.R
@@ -16,22 +17,23 @@ import kotlinx.coroutines.launch
 class DemoViewModel(
     private val loadDataFromAssetUseCase: LoadDataFromAssetUseCase,
     private val currencyInfoDao: CurrencyInfoDao
-): ViewModel() {
+) : ViewModel() {
 
-    private val _viewState = MutableStateFlow(ViewState(emptyList()))
+    private val _viewState = MutableStateFlow(ViewState(R.string.title_all, emptyList()))
     val viewState = _viewState.asStateFlow()
 
     private val _viewEvent = MutableSharedFlow<ViewEvent>()
     val viewEvent = _viewEvent.asSharedFlow()
 
     fun start() {
-        loadCryptoCurrency()
+        loadAllCurrency()
     }
 
     fun deleteAll() {
         viewModelScope.launch {
             currencyInfoDao.deleteAll()
             _viewEvent.emit(ViewEvent.ShowToast(R.string.clear_data_succeed_msg))
+            loadAllCurrency()
         }
     }
 
@@ -40,25 +42,39 @@ class DemoViewModel(
             val data = loadDataFromAssetUseCase.execute(context.assets.open("data.json"))
             currencyInfoDao.insertAll(data)
             _viewEvent.emit(ViewEvent.ShowToast(R.string.load_data_succeed_msg))
+            loadAllCurrency()
         }
     }
 
     fun loadCryptoCurrency() {
-        updateViewState(R.string.load_crypto_data_succeed_msg) { currencyInfoDao.getCryptoList() }
+        updateViewState(
+            R.string.load_crypto_data_succeed_msg,
+            R.string.title_crypto
+        ) { currencyInfoDao.getCryptoList() }
     }
 
     fun loadFiatCurrency() {
-        updateViewState(R.string.load_fiat_data_succeed_msg) { currencyInfoDao.getFiatList() }
+        updateViewState(
+            R.string.load_fiat_data_succeed_msg,
+            R.string.title_fiat
+        ) { currencyInfoDao.getFiatList() }
     }
 
     fun loadAllCurrency() {
-        updateViewState(R.string.load_all_data_succeed_msg) { currencyInfoDao.getAllList() }
+        updateViewState(
+            R.string.load_all_data_succeed_msg,
+            R.string.title_all
+        ) { currencyInfoDao.getAllList() }
     }
 
-    private fun updateViewState(msgResId: Int, dataProvider: suspend () -> List<CurrencyInfo>) {
+    private fun updateViewState(
+        @StringRes msgResId: Int,
+        @StringRes titleResId: Int,
+        dataProvider: suspend () -> List<CurrencyInfo>
+    ) {
         viewModelScope.launch {
             val data = dataProvider()
-            _viewState.value = ViewState(data)
+            _viewState.value = ViewState(titleResId, data)
             if (data.isNotEmpty()) {
                 _viewEvent.emit(ViewEvent.ShowToast(msgResId))
             }
@@ -66,10 +82,11 @@ class DemoViewModel(
     }
 
     data class ViewState(
+        @StringRes val titleResId: Int,
         val currencyInfoList: List<CurrencyInfo>
     )
 
     sealed class ViewEvent {
-        data class ShowToast(val msgResId: Int): ViewEvent()
+        data class ShowToast(val msgResId: Int) : ViewEvent()
     }
 }

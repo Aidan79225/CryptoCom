@@ -4,15 +4,22 @@ import androidx.lifecycle.ViewModel
 import com.aidan.crypto.entity.CurrencyInfo
 import com.aidan.crypto.domain.SearchCurrencyInfoUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import java.util.concurrent.TimeUnit
 
 class CurrencyListViewModel(
     private val searchCurrencyInfoUseCase: SearchCurrencyInfoUseCase
 ) : ViewModel() {
 
-    private val searchKeyFlow = MutableStateFlow("")
+    private val _searchKeyFlow = MutableStateFlow("")
+    private val searchKeyFlow = _searchKeyFlow.asStateFlow()
+
     private val totalCurrencyInfoFlow = MutableStateFlow(emptyList<CurrencyInfo>())
 
     val viewStateFlow = combine(
@@ -33,7 +40,7 @@ class CurrencyListViewModel(
     }
 
     fun updateSearchKey(newKey: String) {
-        searchKeyFlow.value = newKey
+        _searchKeyFlow.value = newKey
     }
 
     data class ViewState(

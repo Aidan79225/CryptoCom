@@ -13,5 +13,10 @@
     <string name="load_crypto_data_succeed_msg">Successfully loaded crypto data</string>
     <string name="load_fiat_data_succeed_msg">Successfully loaded fiat data</string>
     <string name="load_all_data_succeed_msg">Successfully loaded all data</string>
+
+    <string name="title_crypto">Crypto</string>
+    <string name="title_fiat">Fiat</string>
+    <string name="title_all">Currency</string>
+
     <string name="no_results">No Results</string>
 </resources>
