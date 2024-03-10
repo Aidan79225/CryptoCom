@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text2.BasicTextField2
+import androidx.compose.foundation.text2.input.TextFieldLineLimits
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Clear
@@ -102,6 +105,7 @@ fun CurrencyListScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchCurrencyBar(
     vm: CurrencyListViewModel,
@@ -117,15 +121,16 @@ fun SearchCurrencyBar(
     ) {
         val keyboardController = LocalSoftwareKeyboardController.current
         val focusManager = LocalFocusManager.current
-        BasicTextField(
-            value = TextFieldValue(text = viewState.searchKey, selection = TextRange(viewState.searchKey.length)),
-            onValueChange = { vm.updateSearchKey(it.text) },
+
+        BasicTextField2(
+            value = viewState.searchKey,
+            onValueChange = { vm.updateSearchKey(it) },
             textStyle = TextStyle(
                 fontSize = 20.sp,
                 color = Color.DarkGray
             ),
-            singleLine = true,
-            decorationBox = { innerTextField ->
+            lineLimits = TextFieldLineLimits.SingleLine,
+            decorator = { innerTextField ->
                 if (viewState.searchKey.isEmpty()) {
                     Text(
                         text = stringResource(id = R.string.search_hint_text),
