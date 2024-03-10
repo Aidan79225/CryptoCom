@@ -11,7 +11,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-class LoadDataFromAssetUseCase() {
+class LoadDataFromAssetUseCase {
     suspend fun execute(dataInputStream: InputStream): List<CurrencyInfo> = withContext(Dispatchers.Default) {
         val bufferReader = BufferedReader(InputStreamReader(dataInputStream))
         val jsonString = buildString {
